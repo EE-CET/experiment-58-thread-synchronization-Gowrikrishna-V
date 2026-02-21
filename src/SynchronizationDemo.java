@@ -41,9 +41,9 @@ public class SynchronizationDemo {
         MyThread2 t2 = new MyThread2(obj);
 
         t1.start();
-        t1.join();   // Wait for first thread to finish
+        t1.join(); 
 
         t2.start();
-        t2.join();   // Wait for second thread to finish
+        t2.join();   
     }
 }
