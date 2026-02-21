@@ -1,41 +1,49 @@
-
 class Table {
+
     synchronized void printTable(int n) {
         for (int i = 1; i <= 5; i++) {
-           
             System.out.print(n * i + " ");
         }
-        
+        System.out.println();
+    }
+}
+
+class MyThread1 extends Thread {
+    Table t;
+
+    MyThread1(Table t) {
+        this.t = t;
+    }
+
+    public void run() {
+        t.printTable(5);
+    }
+}
+
+class MyThread2 extends Thread {
+    Table t;
+
+    MyThread2(Table t) {
+        this.t = t;
+    }
+
+    public void run() {
+        t.printTable(100);
     }
 }
 
 public class SynchronizationDemo {
-    public static void main(String[] args) {
-        Table sharedTable = new Table();
+    public static void main(String[] args) throws Exception {
 
-        Thread thread1 = new Thread(() -> {
-            sharedTable.printTable(5);
-        });
+        Table obj = new Table();
 
-        Thread thread2 = new Thread(() -> {
-            sharedTable.printTable(100);
-        });
+        MyThread1 t1 = new MyThread1(obj);
+        MyThread2 t2 = new MyThread2(obj);
 
-        try {
-            
-            thread1.start();
-            thread1.join();
+        t1.start();
+        t1.join();   // Wait for first thread to finish
 
-            
-            System.out.print("\n");
-
-            
-            thread2.start();
-            thread2.join();
-
-        } catch (InterruptedException e) {
-            System.err.println("A thread was interrupted.");
-            Thread.currentThread().interrupt();
-        }
+        t2.start();
+        t2.join();   // Wait for second thread to finish
     }
 }
